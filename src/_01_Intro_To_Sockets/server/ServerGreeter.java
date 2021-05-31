@@ -1,24 +1,42 @@
 package _01_Intro_To_Sockets.server;
 
 import java.net.*;
+
+import javax.swing.JOptionPane;
+
 import java.io.*;
 
 public class ServerGreeter extends Thread {
 	//1. Create an object of the ServerSocket class
-
+	ServerSocket ss;
 	public ServerGreeter() throws IOException {
 		//2. Initialize the ServerSocket object. In the parameters,
 		//   you must define the port at which the server will listen for connections.
-		
+		ss=new ServerSocket(8080);
 		//*OPTIONAL* you can set a time limit for the server to wait by using the 
 		//  ServerSocket's setSoTimeout(int timeInMilliSeconds) method
 	}
 
 	public void run() {
 		//3. Create a boolean variable and initialize it to true.
-		
+		boolean t=true;
 		//4. Make a while loop that continues looping as long as the boolean created in the previous step is true.
-			
+			while(t==true) {
+				try {
+					JOptionPane.showMessageDialog(null, "A server is waiting for a client to connect");
+					Socket d=ss.accept();
+					JOptionPane.showMessageDialog(null, "The client has connected");
+					DataInputStream i=new DataInputStream(d.getInputStream());
+					i.readUTF();
+					DataOutputStream o=new DataOutputStream(d.getOutputStream());
+					o.writeUTF("hi");
+					ss.close();
+				}
+				catch(IOException e) {
+						JOptionPane.showMessageDialog(null, "There is a IOException");
+						t=false;
+					}
+			}
 			//5. Make a try-catch block that checks for two types Exceptions: SocketTimeoutException and IOException.
 			//   Put steps 8 - 15 in the try block.
 		
@@ -49,6 +67,12 @@ public class ServerGreeter extends Thread {
 
 	public static void main(String[] args) {
 		//16. In a new thread, create an object of the ServerGreeter class and start the thread. Don't forget the try-catch.
-		
+		try {
+			Thread t=new ServerGreeter();
+			t.start();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }
