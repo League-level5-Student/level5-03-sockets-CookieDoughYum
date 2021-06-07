@@ -8,7 +8,7 @@ public class ClientGreeter {
    public static void main(String [] args) {
 	  //1. Create a String for the ip address of the server. 
 	  // If you don't know how to find a computer's ip address, ask about ifconfig on linux/mac and ipconfig on windows.
-      String ip=new String("172.17.0.2");
+      String ip=new String("172.31.62.234");
       //2. Create an integer for the server's port number
       int port=8080;
       //3. Surround steps 4-9 in a try-catch block that catches any IOExceptions.
