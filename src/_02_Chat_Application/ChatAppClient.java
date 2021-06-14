@@ -15,10 +15,14 @@ public class ChatAppClient {
 
 	ObjectOutputStream os;
 	ObjectInputStream is;
+	
+	Object nsg;
+	ChatAppGui cag;
 
-	public ChatAppClient(String ip, int port) {
+	public ChatAppClient(String ip, int port, ChatAppGui cag) {
 		this.ip = ip;
 		this.port = port;
+		this.cag = cag;
 	}
 
 	public void start(){
@@ -39,8 +43,10 @@ public class ChatAppClient {
 		
 		while (connection.isConnected()) {
 			try {
-				Object nsg=(String)is.readObject();
-				JOptionPane.showMessageDialog(null, nsg);
+				nsg=(String)is.readObject();
+				//JOptionPane.showMessageDialog(null, msg);
+				nsg=cag.text.getText();
+				cag.text.setText((String)nsg);
 				System.out.println(is.readObject());
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
@@ -52,7 +58,7 @@ public class ChatAppClient {
 	public void sendClick() {
 		try {
 			if (os != null) {
-				os.writeObject("CLICK SENT FROM CLIENT");
+				os.writeObject(nsg);
 				os.flush();
 			}
 		} catch (IOException e) {

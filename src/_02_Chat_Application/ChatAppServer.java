@@ -27,9 +27,14 @@ public class ChatAppServer {
 
 	ObjectOutputStream os;
 	ObjectInputStream is;
-
-	public ChatAppServer(int port) {
+	
+	Object msg;
+    ChatAppGui cag;
+    
+	public ChatAppServer(int port, ChatAppGui cag) {
 		this.port = port;
+		this.cag=cag;
+		
 	}
 
 	public void start(){
@@ -45,8 +50,10 @@ public class ChatAppServer {
 
 			while (connection.isConnected()) {
 				try {
-					Object msg=(String)is.readObject();
-					JOptionPane.showMessageDialog(null, msg);
+					msg=(String)is.readObject();
+					//JOptionPane.showMessageDialog(null, msg);
+					msg=cag.text.getText();
+					cag.text.setText((String)msg);
 					System.out.println(is.readObject());
 				}catch(EOFException e) {
 					JOptionPane.showMessageDialog(null, "Connection Lost");
@@ -74,7 +81,7 @@ public class ChatAppServer {
 	public void sendClick() {
 		try {
 			if (os != null) {
-				os.writeObject("CLICK SENT FROM SERVER");
+				os.writeObject(msg);
 				os.flush();
 			}
 		} catch (IOException e) {
